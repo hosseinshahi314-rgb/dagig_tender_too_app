@@ -1,0 +1,48 @@
+name: Flutter CI  # نامی برای workflow خود انتخاب کنید
+
+# این بخش مشخص می‌کند چه زمانی این workflow اجرا شود
+on:
+  push:
+    branches: [ "main" ]  # با هر بار push به شاخه main، workflow اجرا شود
+  pull_request:
+    branches: [ "main" ]  # با هر بار ایجاد Pull Request به شاخه main، workflow اجرا شود
+  workflow_dispatch:      # این گزینه به شما اجازه می‌دهد workflow را به صورت دستی از تب Actions اجرا کنید
+
+jobs:
+  build_android_apk:
+    name: DagigTenderTool APK  # نام این Job مشخص
+    runs-on: ubuntu-latest    # از آخرین نسخه سیستم عامل اوبونتو برای اجرا استفاده کن
+
+    steps:
+    # مرحله 1: دریافت کد از ریپازیتوری
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    # مرحله 2: نصب و تنظیم Java (برای ابزارهای اندروید لازم است)
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin' # توزیع Java
+        java-version: '17'      # نسخه Java (برای فلاتر جدید توصیه می‌شود)
+
+    # مرحله 3: نصب و تنظیم Flutter SDK
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2  # این یک Action آماده برای نصب فلاتر است
+      with:
+        channel: 'stable'               # از نسخه پایدار فلاتر استفاده کن
+        flutter-version: '3.x.x'         # می‌توانید نسخه خاصی را مشخص کنید، مثلاً '3.19.0'
+
+    # مرحله 4: دریافت وابستگی‌های پروژه (پکیج‌های فلاتر)
+    - name: Install dependencies
+      run: flutter pub get
+
+    # مرحله 5: ساخت APK
+    - name: Build APK
+      run: flutter build apk --release   # دستور ساخت APK نهایی
+
+    # مرحله 6: آپلود فایل APK ساخته شده به عنوان یک Artifact
+    - name: Upload APK as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk                 # نامی که برای Artifact در نظر گرفته می‌شود
+        path: build/app/outputs/flutter-apk/app-release.apk  # مسیر فایل APK ساخته شده
