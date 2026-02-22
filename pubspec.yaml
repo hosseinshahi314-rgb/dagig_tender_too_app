@@ -1,0 +1,37 @@
+name: dagigtendertool
+description: A professional tender analysis tool for oil ministry contracts.
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  provider: ^6.1.1
+  flutter_bloc: ^8.1.3
+  bloc: ^8.1.4
+  intl: ^0.19.0
+  
+  flutter_test: any
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  bloc_test: ^9.1.7
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/fonts/
+
+  fonts:
+    - family: Vazir
+      fonts:
+        - asset: assets/fonts/Vazir-Regular.ttf
